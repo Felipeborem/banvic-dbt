@@ -1,0 +1,11 @@
+sources:
+  - name: erp
+    description: Esse é o sistema ERP do Banco BanVic, com dados dos clientes, colaboradores contas e etc
+    schema: erp_banvic
+
+    tables:
+      #tabelas de localidades
+      - name: localidades
+      #tabelas de clientes
+
+      - name: clientes
