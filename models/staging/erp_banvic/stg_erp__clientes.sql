@@ -1,7 +1,7 @@
 
 with fonte_clientes as(
         select*
-        from {{source("erp", "clientes")}}
+        from {{source('erp', 'clientes')}}
     )
 
     , renomeado as (
