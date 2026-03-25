@@ -6,6 +6,32 @@ sources:
     tables:
       #tabelas de localidades
       - name: localidades
-      #tabelas de clientes
-
+        columns:
+          - name: cod_localidade
+            description: pk da tabela de localidades 
+            data_tests:
+              - unique
+              - not_null
+              
+    
       - name: clientes
+        columns:
+          - name: cod_cliente
+            description: pk da tabela de localidades 
+            data_tests:
+              - unique
+              - not_null
+      - name: agencias
+        columns:
+          - name: cod_agencia
+            description: pk da tabela de agencias 
+            data_tests:
+              - unique
+              - not_null
+      - name: colaboradores
+        columns:
+          - name: cod_colaborador
+            description: pk da tabela de colaboradores 
+            data_tests:
+              - unique
+              - not_null
