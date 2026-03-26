@@ -16,7 +16,7 @@ with
             , extract(month from date_day) as mes
             , extract(day from date_day) as dia
             , extract(quarter from date_day) as trimestre
-            , to_char(date_day, 'yyyy-mm-dd') as data_completa
+            , date_day as data_completa
             , extract(dow from date_day) as dia_da_semana
             , case 
                 when extract(dow from date_day) in (0, 6) then true
