@@ -1,29 +1,25 @@
 with
-    intervalo_de_datas as (
-        {{ 
-            dbt_utils.date_spine(
-                datepart="day",
-                start_date="cast('2010-01-01' as date)",
-                end_date="cast('2023-12-31' as date)"
-            )
-        }}
+    fonte_transacoes as (
+        select *
+        from {{ source('erp', 'transacoes') }}
     )
-
-    , criar_colunas as (
+    
+    , renomeado as (
         select
-            row_number() over(order by date_day asc) as pk_data
-            , extract(year from date_day) as ano
-            , extract(month from date_day) as mes
-            , extract(day from date_day) as dia
-            , extract(quarter from date_day) as trimestre
-            , to_char(date_day, 'yyyy-mm-dd') as data_completa
-            , extract(dow from date_day) as dia_da_semana
+            cast(cod_transacao as int) as pk_transacao
+            , cast(num_conta as int) as fk_conta
+            , cast(cod_transacao as int) as numero_transacao
+            , cast(data_transacao as date) data_transacao
+            , cast(data_transacao as timestamp) ts_transacao
+            , nome_transacao
             , case 
-                when extract(dow from date_day) in (0, 6) then true
-                else false
-            end as is_weekend
-        from intervalo_de_datas
+                when valor_transacao > 0 then 'Crédito'
+                when valor_transacao < 0 then 'Débito'
+                else null 
+            end as tipo_transacao
+            , cast(valor_transacao as numeric(28,2)) as valor_transacao
+        from fonte_transacoes
     )
 
 select *
-from criar_colunas
+from renomeado
