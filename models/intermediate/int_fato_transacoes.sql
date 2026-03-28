@@ -1,3 +1,5 @@
+
+
 with
     transacoes as (
         select
@@ -21,15 +23,62 @@ with
         from {{ ref('int_fato_contas') }}
     ),
 
+    colaboradores as (
+        select
+            cod_colaborador,
+            nome_completo as nome_completo_colaborador,
+            email_colaborador
+        from {{ ref('dim_colaboradores')}}
+    ),
+
+
+
+    agencias as(
+        select
+            COD_AGENCIA as cod_agencia,
+            nome_agencia,
+            cod_localidade_agencia,
+            tipo_agencia
+        from {{ ref('dim_agencias')}}
+    ),
+
+    clientes as(
+        select
+            pk_cliente,
+            fk_localidade,
+            nome_cliente_completo,
+            email_cliente,
+            tipo_cliente,
+            ts_inclusao,
+            cpfcnpj_cliente,
+            data_nascimento_cliente,
+            endereco_cliente,
+            cep_cliente,
+            cidade_cliente,
+            uf_cliente
+        from {{ref('dim_clientes')}}
+
+    ),
+
     datas as (
         select 
             pk_data,
             data_completa
-        from {{ ref('int_dimensao_datas') }}
+        from {{ ref('dim_datas') }}
     ),
 
     joined as (
         select
+            agencias.cod_agencia,
+            agencias.nome_agencia,
+            agencias.cod_localidade_agencia,
+            agencias.tipo_agencia,
+            colaboradores.cod_colaborador,
+            colaboradores.nome_completo_colaborador,
+            colaboradores.email_colaborador,
+            clientes.email_cliente,
+            clientes.tipo_cliente,
+            clientes.nome_cliente_completo,
             t.pk_transacao,
             t.fk_conta,
             c.fk_cliente,
@@ -47,9 +96,22 @@ with
             on t.fk_conta = c.pk_conta
         left join datas d 
             on try_cast(t.data_transacao as date) = d.data_completa
+        left join clientes
+        left join colaboradores
+        left join agencias
     )
 
 select
+    cod_agencia,
+    nome_agencia,
+    cod_localidade_agencia,
+    tipo_agencia,
+    cod_colaborador,
+    nome_completo_colaborador,
+    email_colaborador,
+    email_cliente,
+    tipo_cliente,
+    nome_cliente_completo,
     pk_transacao,
     fk_conta,
     fk_cliente,

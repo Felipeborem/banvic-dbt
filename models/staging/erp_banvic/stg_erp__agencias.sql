@@ -1,11 +1,16 @@
 with fonte_agencias as (
     select *
     from {{ source('erp', 'agencias') }}
-)
+),
 
-, renomeado as (
+renomeado as (
     select
-        cast(cast(cod_agencia as numeric) as int) as pk_agencia
+        COD_AGENCIA
+        ,NOME as nome_agencia
+        ,ENDERECO as endereco_agencia
+        ,COD_LOCALIDADE as cod_localidade_agencia
+        ,DATA_ABERTURA as data_abertura_agencia
+        ,TIPO_AGENCIA
     from fonte_agencias
 )
 

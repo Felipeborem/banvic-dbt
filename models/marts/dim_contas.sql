@@ -1,8 +1,8 @@
 with
-    dim_datas as (
+    dim_contas as (
         select *
-        from {{ ref('int_dimensao_datas') }}
+        from {{ ref('int_dim_contas') }}
     )
 
 select *
-from dim_datas
+from dim_contas
